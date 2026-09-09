@@ -79,8 +79,10 @@ change:
 ```powershell
 python scripts\backup.py
 ```
-<img width="1211" height="1268" alt="2026-09-09 10_43_31-Wooden Shaft Tracker — Mozilla Firefox" src="https://github.com/user-attachments/assets/19ce686a-1c62-4bf8-a035-82ef364befbc" />
-<img width="1241" height="1202" alt="2026-09-09 10_43_18-Wooden Shaft Tracker — Mozilla Firefox" src="https://github.com/user-attachments/assets/2d4b51e0-624a-44d4-8cb2-e31b956177df" />
-<img width="1263" height="963" alt="2026-09-09 10_42_57-Wooden Shaft Tracker — Mozilla Firefox" src="https://github.com/user-attachments/assets/2b9f644e-28f4-44be-9c88-1117c88526c6" />
+
+
 <img width="1257" height="769" alt="2026-09-09 10_42_09-Wooden Shaft Tracker — Mozilla Firefox" src="https://github.com/user-attachments/assets/e099ef9f-d3a3-4c51-9f81-d324b7b8a86c" />
 <img width="1264" height="778" alt="2026-09-09 10_41_42-Wooden Shaft Tracker — Mozilla Firefox" src="https://github.com/user-attachments/assets/6660b4ca-af46-4c1c-a21c-1d90c829c42f" />
+<img width="1263" height="963" alt="2026-09-09 10_42_57-Wooden Shaft Tracker — Mozilla Firefox" src="https://github.com/user-attachments/assets/2b9f644e-28f4-44be-9c88-1117c88526c6" />
+<img width="1241" height="1202" alt="2026-09-09 10_43_18-Wooden Shaft Tracker — Mozilla Firefox" src="https://github.com/user-attachments/assets/2d4b51e0-624a-44d4-8cb2-e31b956177df" />
+<img width="1211" height="1268" alt="2026-09-09 10_43_31-Wooden Shaft Tracker — Mozilla Firefox" src="https://github.com/user-attachments/assets/19ce686a-1c62-4bf8-a035-82ef364befbc" />
