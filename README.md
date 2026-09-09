@@ -12,9 +12,9 @@ same way.
 ## What it does
 
 - Records each batch of shafts you buy, and each shaft's spine and
-  weight.
+  weight. (Easy/Quick Manual Entry)
 - Lets you build matched sets by hand, on the Sets tab.
-- Finds matched sets for you, on the Analysis tab. A solver searches
+- Finds Optimum matched sets for you, on the Analysis tab. A solver searches
   for the largest matched set, or the most complete dozens (full or
   partial 12-arrow sets), across a whole batch.
 
