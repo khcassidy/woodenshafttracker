@@ -1,0 +1,824 @@
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff;
+  --fg: #1a1a1a;
+  --muted: #666666;
+  --border: #d0d0d0;
+  --accent: #2563eb;
+  --ok: #16a34a;
+  --warn: #b45309;
+  --error: #dc2626;
+  --queued: #7c3aed;
+  --row-alt: #f7f7f7;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161a;
+    --fg: #e8e8e8;
+    --muted: #9a9a9a;
+    --border: #3a3d42;
+    --accent: #60a5fa;
+    --ok: #4ade80;
+    --warn: #fbbf24;
+    --error: #f87171;
+    --queued: #a78bfa;
+    --row-alt: #1b1e23;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: ui-monospace, "SF Mono", Consolas, "Cascadia Code", monospace;
+  font-size: 14px;
+  margin: 0;
+}
+
+header.top-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+header.top-nav .brand {
+  font-weight: bold;
+}
+
+header.top-nav nav a {
+  color: var(--muted);
+  text-decoration: none;
+  margin-right: 1rem;
+}
+
+header.top-nav nav a.active {
+  color: var(--fg);
+  font-weight: bold;
+}
+
+main#app {
+  padding: 1.5rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 1.3rem;
+  margin: 0 0 1rem;
+}
+
+h2 {
+  font-size: 1rem;
+  margin: 1.5rem 0 0.75rem;
+}
+
+a.back-link {
+  color: var(--accent);
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 0.75rem;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  overflow-x: auto;
+  display: block;
+}
+
+table thead,
+table tbody {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+th,
+td {
+  border: 1px solid var(--border);
+  padding: 0.3rem 0.5rem;
+  text-align: left;
+}
+
+.batch-table tbody tr.batch-row {
+  cursor: pointer;
+}
+
+.batch-table tbody tr.batch-row:hover {
+  background: var(--row-alt);
+}
+
+/* Generic (not scoped to .batch-table): every sortable table shares this
+   -- see tablesort.js. */
+th.sortable {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+th.sortable:hover {
+  background: var(--row-alt);
+}
+
+th.sortable::after {
+  content: "";
+  display: inline-block;
+  width: 1em;
+  color: var(--muted);
+}
+
+th.sorted-asc::after {
+  content: " \25B2";
+}
+
+th.sorted-desc::after {
+  content: " \25BC";
+}
+
+.form-hint {
+  color: var(--muted);
+  font-size: 0.85em;
+  max-width: 420px;
+  margin: 0.25rem 0 0.75rem;
+}
+
+.entry-grid input,
+.entry-grid select {
+  width: 100%;
+  border: 1px solid transparent;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  padding: 0.2rem;
+}
+
+.entry-grid input:focus,
+.entry-grid select:focus {
+  outline: 2px solid var(--accent);
+  background: var(--row-alt);
+}
+
+.entry-grid td.readonly {
+  color: var(--muted);
+}
+
+/* table-layout: fixed splits width evenly across all 10 columns by
+   default. A %-based override for one column still shrinks with a narrow
+   window, which starved Actions of the fixed ~80px its two buttons need
+   -- so the columns with bounded content (#, A-B, Actions) get a stable
+   rem width instead, and the remaining columns (the entry inputs and
+   Notes) split whatever's left. */
+.entry-grid th:nth-child(1),
+.entry-grid td:nth-child(1) {
+  width: 9rem;
+}
+
+.entry-grid th:nth-child(5),
+.entry-grid td:nth-child(5) {
+  width: 4rem;
+}
+
+.entry-grid th:nth-child(10),
+.entry-grid td:nth-child(10) {
+  width: 5rem;
+}
+
+.entry-grid .shaft-label {
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.shaft-set-tag {
+  font-weight: normal;
+  color: var(--muted);
+}
+
+.hover-tooltip {
+  position: fixed;
+  z-index: 1000;
+  max-width: 22rem;
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.6rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
+.entry-grid tr.row-consumed {
+  opacity: 0.7;
+}
+
+.entry-grid td.row-actions {
+  white-space: nowrap;
+  text-align: center;
+}
+
+.row-action-btn {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--fg);
+  width: 1.6rem;
+  height: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  margin: 0 0.15rem;
+}
+
+.row-action-btn.row-action-delete {
+  color: var(--error);
+  border-color: var(--error);
+}
+
+.add-shaft-btn {
+  margin-top: 0.75rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--accent);
+  padding: 0.3rem 0.8rem;
+  cursor: pointer;
+}
+
+.status-saving {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.status-ok {
+  border-left: 2px solid var(--ok) !important;
+}
+
+.status-warn {
+  border-left: 2px solid var(--warn) !important;
+}
+
+.status-error {
+  border-left: 2px solid var(--error) !important;
+  background: color-mix(in srgb, var(--error) 12%, transparent);
+}
+
+.status-queued {
+  border-left: 2px solid var(--queued) !important;
+}
+
+.entry-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+fieldset {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.pass-buttons button {
+  margin-right: 0.4rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: inherit;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+}
+
+.pass-buttons button.active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.counts-line {
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.keys-help {
+  color: var(--muted);
+  font-size: 0.85em;
+  margin-bottom: 1rem;
+}
+
+.batch-create-form {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 420px;
+}
+
+.batch-create-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.batch-create-form input,
+.batch-create-form select,
+.batch-create-form textarea,
+.batch-details-form input,
+.batch-details-form select,
+.batch-details-form textarea {
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  padding: 0.3rem;
+  font: inherit;
+}
+
+.batch-create-form textarea,
+.batch-details-form textarea {
+  resize: vertical;
+}
+
+.batch-create-form button {
+  align-self: flex-start;
+  padding: 0.4rem 1rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.batch-details {
+  margin-bottom: 1rem;
+}
+
+.details-summary {
+  color: var(--muted);
+}
+
+.details-comments {
+  color: var(--muted);
+  font-size: 0.9em;
+  margin-top: 0.2rem;
+  white-space: pre-wrap;
+}
+
+.edit-details-btn {
+  margin-top: 0.4rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--accent);
+  padding: 0.2rem 0.6rem;
+  cursor: pointer;
+}
+
+.delete-batch-btn {
+  margin-top: 0.4rem;
+  margin-left: 0.5rem;
+  border: 1px solid var(--error);
+  background: transparent;
+  color: var(--error);
+  padding: 0.2rem 0.6rem;
+  cursor: pointer;
+}
+
+.batch-details-form {
+  margin-top: 0.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 1.5rem;
+  max-width: 680px;
+}
+
+.batch-details-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.batch-details-form label.span-2,
+.batch-details-form .form-actions {
+  grid-column: 1 / -1;
+}
+
+.batch-details-form .form-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.batch-details-form button[type="submit"] {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+}
+
+.batch-details-form button[type="button"] {
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid var(--border);
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+}
+
+.form-error {
+  color: var(--error);
+}
+
+.empty-state {
+  color: var(--muted);
+}
+
+.export-links {
+  margin-top: 2rem;
+}
+
+.export-link-btn {
+  display: inline-block;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--accent);
+  padding: 0.3rem 0.8rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.import-form {
+  margin-top: 2rem;
+  max-width: 480px;
+}
+
+.import-form button {
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--fg);
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+}
+
+.import-report {
+  margin-top: 0.75rem;
+}
+
+.import-report ul {
+  margin: 0.25rem 0;
+  padding-left: 1.2rem;
+}
+
+.import-warning {
+  color: var(--warn);
+}
+
+.import-errors-heading {
+  color: var(--error);
+}
+
+.config-section {
+  margin-bottom: 2.5rem;
+  max-width: 700px;
+}
+
+.config-list {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.config-list td {
+  border: 1px solid var(--border);
+  padding: 0.3rem 0.5rem;
+}
+
+.config-list input[type="text"],
+.config-list input[type="number"] {
+  width: 100%;
+  border: 1px solid transparent;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  padding: 0.15rem;
+}
+
+.config-list input:focus {
+  outline: 2px solid var(--accent);
+  background: var(--row-alt);
+}
+
+.config-list button {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--fg);
+  cursor: pointer;
+  padding: 0.15rem 0.4rem;
+  margin: 0 0.1rem;
+}
+
+.config-add-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  align-items: center;
+}
+
+.config-add-form input {
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  padding: 0.3rem;
+}
+
+.config-add-form button {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--accent);
+  padding: 0.3rem 0.8rem;
+  cursor: pointer;
+}
+
+.config-params-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 1.5rem;
+  max-width: 700px;
+}
+
+.config-params-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.config-params-form input,
+.config-params-form select {
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  padding: 0.3rem;
+}
+
+.config-params-form button {
+  grid-column: 1 / -1;
+  justify-self: start;
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+.config-params-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.config-params-actions button {
+  margin-top: 0.5rem;
+}
+
+.make-default-btn {
+  align-self: flex-end;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--fg);
+  padding: 0.3rem 0.8rem;
+  cursor: pointer;
+}
+
+.make-default-btn:disabled {
+  color: var(--muted);
+  cursor: default;
+}
+
+.sets-builder,
+.sets-list-section {
+  /* overrides .config-section's 700px cap: a child's own max-width can't
+     exceed what its parent actually gives it, and both sections now hold
+     an 11-column shaft-info table (the candidate picker, and each card's
+     "Shafts" panel) that needs the room .sets-card's own 1500px alone
+     can't provide while its parent is still stuck at 700px. */
+  max-width: 1500px;
+}
+
+.sets-picker-row {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.sets-inline-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.sets-inline-label select,
+.sets-inline-label input,
+.sets-inline-label textarea {
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  padding: 0.3rem;
+  font: inherit;
+}
+
+.num-cell {
+  text-align: right;
+}
+
+.notes-cell {
+  width: 10rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sets-create-form {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  margin-top: 1rem;
+}
+
+.sets-create-form button {
+  padding: 0.4rem 1rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.sets-card {
+  border: 1px solid var(--border);
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+  max-width: 1500px;
+}
+
+.sets-card h3 {
+  margin: 0 0 0.25rem;
+  font-size: 0.95rem;
+}
+
+.sets-card-disbanded {
+  opacity: 0.6;
+}
+
+.sets-card-disband-btn,
+.sets-card-delete-btn {
+  border: 1px solid var(--error);
+  color: var(--error);
+  background: transparent;
+  padding: 0.3rem 0.8rem;
+  cursor: pointer;
+}
+
+.sets-card-notes-text {
+  margin: 0.4rem 0;
+  white-space: pre-wrap;
+}
+
+.sets-card-notes-edit-btn {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--accent);
+  padding: 0.15rem 0.5rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.sets-card-notes-form {
+  margin: 0.4rem 0;
+}
+
+.sets-card-notes-form textarea {
+  display: block;
+  width: 100%;
+  max-width: 500px;
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  padding: 0.3rem;
+  font: inherit;
+  resize: vertical;
+}
+
+.sets-card-notes-form div {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.sets-card-notes-form button[type="submit"] {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 0.25rem 0.7rem;
+  cursor: pointer;
+}
+
+.sets-card-notes-form button[type="button"] {
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid var(--border);
+  padding: 0.25rem 0.7rem;
+  cursor: pointer;
+}
+
+.sets-card-members {
+  margin: 0.5rem 0;
+}
+
+.sets-card-members summary {
+  cursor: pointer;
+  color: var(--accent);
+  font-size: 0.85rem;
+}
+
+.analysis-params-editor {
+  margin: 0.5rem 0 1rem;
+}
+
+.analysis-params-editor summary {
+  cursor: pointer;
+  color: var(--accent);
+}
+
+.analysis-params-editor .config-params-form {
+  margin-top: 0.75rem;
+}
+
+.sets-card-members table {
+  margin-top: 0.5rem;
+}
+
+.sets-member-remove-btn {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--error);
+  padding: 0.15rem 0.5rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.sets-add-members {
+  margin-top: 0.6rem;
+}
+
+.sets-add-members-toggle-btn {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--accent);
+  padding: 0.25rem 0.7rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.sets-add-members table {
+  margin-top: 0.5rem;
+}
+
+.sets-add-members button[type="button"]:not(.sets-add-members-toggle-btn) {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 0.25rem 0.7rem;
+  margin-top: 0.5rem;
+  cursor: pointer;
+}
+
+.analysis-run-btn {
+  padding: 0.4rem 1rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.analysis-group-card {
+  border: 1px solid var(--border);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  max-width: 1500px;
+}
+
+.analysis-group-card-leftover {
+  border-style: dashed;
+}
+
+.analysis-group-card-leftover h3 {
+  color: var(--muted);
+}
+
+.analysis-group-card h3 {
+  margin: 0 0 0.25rem;
+  font-size: 0.95rem;
+}

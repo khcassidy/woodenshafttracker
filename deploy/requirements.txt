@@ -1,0 +1,20 @@
+# Deliberately unpinned.
+fastapi           # ASGI app, Pydantic validation, OpenAPI at /docs
+uvicorn           # ASGI server
+watchfiles        # uvicorn --reload file watching
+python-multipart  # multipart/form-data file upload for import preview
+
+pytest            # test runner
+httpx2            # required by starlette.testclient (fastapi.testclient.TestClient)
+
+ortools           # CP-SAT solver for core/grouping.py (slice 2's analysis engine)
+
+# Pydantic's own error names this package: on Python <3.10 it cannot evaluate
+# a postponed annotation that uses the `X | None` union syntax (every model
+# in app/api/schemas.py and elsewhere) without this fallback. A no-op on
+# 3.10+, so it costs nothing on the dev baseline this project targets.
+eval_type_backport ; python_version < "3.10"
+
+# stdlib covers everything else: sqlite3, decimal, csv, json, zipfile, xml.etree, pathlib.
+# openpyxl   -- OPTIONAL, and only for XLSX *export*. XLSX *import* uses stdlib zipfile
+#               + xml.etree so the one-off importer never touches a float.

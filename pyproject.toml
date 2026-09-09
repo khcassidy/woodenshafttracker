@@ -1,0 +1,10 @@
+[project]
+name = "shafttracker"
+version = "0.1.0"
+description = "Wooden arrow shaft spine and weight tracker"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-q -ra --strict-markers"

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"import sys; print\\(sys.executable\\)\")",
+      "Bash(.venv/Scripts/python -c \"from ortools.sat.python import cp_model; print\\('cp_model ok'\\); m = cp_model.CpModel\\(\\); x = m.NewBoolVar\\('x'\\); m.Maximize\\(x\\); s = cp_model.CpSolver\\(\\); status = s.Solve\\(m\\); print\\(s.StatusName\\(status\\), s.Value\\(x\\)\\)\")"
+    ]
+  }
+}

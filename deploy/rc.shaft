@@ -1,0 +1,80 @@
+#!/bin/sh
+# /etc/rc.d/rc.shaft
+#
+# Starts, stops, and reports the status of the Shaft Tracker server
+# (see README.md in the deployment folder this file shipped with).
+#
+# Install:
+#   cp rc.shaft /etc/rc.d/rc.shaft
+#   chmod +x /etc/rc.d/rc.shaft
+#
+# Slackware has no service manager for a locally added program like
+# this one, and rc.M only calls its own fixed set of core rc.<name>
+# scripts, never one dropped in later. To start Shaft Tracker at boot,
+# add this line to /etc/rc.d/rc.local:
+#   /etc/rc.d/rc.shaft start
+
+NAME=shafttracker
+DIR=/opt/shafttracker
+PYTHON=/usr/bin/python3
+PIDFILE=/var/run/$NAME.pid
+LOGFILE=/var/log/$NAME.log
+
+shaft_start() {
+  if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
+    echo "$NAME is already running (PID $(cat "$PIDFILE"))."
+    return 1
+  fi
+  if [ ! -d "$DIR" ]; then
+    echo "$DIR not found."
+    return 1
+  fi
+  echo "Starting $NAME..."
+  cd "$DIR" || return 1
+  nohup "$PYTHON" run.py >>"$LOGFILE" 2>&1 &
+  echo $! > "$PIDFILE"
+}
+
+shaft_stop() {
+  if [ ! -f "$PIDFILE" ]; then
+    echo "$NAME is not running (no PID file)."
+    return 1
+  fi
+  PID=$(cat "$PIDFILE")
+  if kill -0 "$PID" 2>/dev/null; then
+    echo "Stopping $NAME (PID $PID)..."
+    kill "$PID"
+  else
+    echo "$NAME is not running (stale PID file)."
+  fi
+  rm -f "$PIDFILE"
+}
+
+shaft_status() {
+  if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
+    echo "$NAME is running (PID $(cat "$PIDFILE"))."
+  else
+    echo "$NAME is not running."
+  fi
+}
+
+case "$1" in
+  start)
+    shaft_start
+    ;;
+  stop)
+    shaft_stop
+    ;;
+  restart)
+    shaft_stop
+    sleep 1
+    shaft_start
+    ;;
+  status)
+    shaft_status
+    ;;
+  *)
+    echo "usage: $0 {start|stop|restart|status}"
+    exit 1
+    ;;
+esac
