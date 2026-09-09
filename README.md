@@ -25,8 +25,7 @@ same way.
 A spreadsheet can calculate spine and weight, but it cannot search
 every possible grouping for the best matched set. A single spreadsheet
 formula can miss a second good set elsewhere in the same batch. Shaft
-Tracker adds a real solver for that search. See [CLAUDE.md](CLAUDE.md)
-for the full design record.
+Tracker adds a real solver for that search.
 
 ## Stack
 
@@ -61,9 +60,6 @@ Run the full test suite with this command:
 pytest
 ```
 
-See [CLAUDE.md](CLAUDE.md) for commands to run a single test file or
-a single test by name.
-
 ## Project layout
 
 - `core/` — the calculation and solver logic. This part touches no
@@ -88,9 +84,3 @@ change:
 ```powershell
 python scripts\backup.py
 ```
-
-## Documentation
-
-[CLAUDE.md](CLAUDE.md) is the full design record for this project. It
-states the architecture, the database rules, and the confirmed product
-decisions behind the analysis engine.
