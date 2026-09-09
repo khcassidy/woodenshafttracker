@@ -28,9 +28,10 @@ same way.
 
 ## Quick start
 
-This is the setup for local development. It needs Python 3.11 or
-later. For deployment to a server on an older Python, see
+For deployment to a server on an older Python, see
 [deploy/README.md](deploy/README.md) — Python 3.9 or later works there.
+
+(Only the /Deploy folder is needed to have minimal running code)
 
 Run these commands from the project root, in PowerShell:
 
