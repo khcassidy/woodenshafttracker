@@ -17,15 +17,6 @@ same way.
 - Finds matched sets for you, on the Analysis tab. A solver searches
   for the largest matched set, or the most complete dozens (full or
   partial 12-arrow sets), across a whole batch.
-- Replaces a hand-built spreadsheet. The spreadsheet's own calculation
-  rules are the reference the analysis engine matches.
-
-## Why it exists
-
-A spreadsheet can calculate spine and weight, but it cannot search
-every possible grouping for the best matched set. A single spreadsheet
-formula can miss a second good set elsewhere in the same batch. Shaft
-Tracker adds a real solver for that search.
 
 ## Stack
 
@@ -37,8 +28,11 @@ Tracker adds a real solver for that search.
 
 ## Quick start
 
-This project needs Python 3.11 or later. Run these commands from the
-project root, in PowerShell:
+This is the setup for local development. It needs Python 3.11 or
+later. For deployment to a server on an older Python, see
+[deploy/README.md](deploy/README.md) — Python 3.9 or later works there.
+
+Run these commands from the project root, in PowerShell:
 
 ```powershell
 python -m venv .venv
