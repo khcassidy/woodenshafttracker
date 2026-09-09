@@ -3,7 +3,7 @@ candidates, solves via core.grouping per the param set's objective, and
 attaches presentation-only fields to the result. core.grouping never
 sees spec bounds or ab_tol_cp -- those are applied here, after the solve,
 so a future cache could key the solve itself separately from these purely
-cosmetic parameters (see CLAUDE.md).
+cosmetic parameters.
 """
 
 from __future__ import annotations

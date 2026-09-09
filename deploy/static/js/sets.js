@@ -1,6 +1,6 @@
 // Sets tab: the manual set builder. A set may span batches, but only
-// within one (diameter, wood) partition -- confirmed product decision,
-// see CLAUDE.md. Both sections re-render from the server's response,
+// within one (diameter, wood) partition -- confirmed product decision.
+// Both sections re-render from the server's response,
 // never a client-side patch, matching batches.js and config.js -- and
 // each triggers the other's refresh, since building or disbanding a set
 // changes what the other section shows.
